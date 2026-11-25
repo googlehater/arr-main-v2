@@ -1,0 +1,13 @@
+{
+  "name": "arr-media-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "АРР Медиа — прототип нового сайта и подготовка CMS",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "dev": "node design-concept/server.mjs",
+    "start": "node design-concept/server.mjs",
+    "check": "node --check design-concept/server.mjs && node --check design-concept/app.js && node --check design-concept/content/projects.js"
+  }
+}

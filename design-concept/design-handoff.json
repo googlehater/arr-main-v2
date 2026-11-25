@@ -1,0 +1,67 @@
+{
+  "status": "local visual concept, CMS not connected",
+  "figma": {
+    "url": "https://www.figma.com/design/MZb0ClTstMFVcHPnTtBSzo",
+    "state": "File created, no design nodes added. Figma MCP Starter call limit reached during library discovery."
+  },
+  "direction": "Крупная репортажная фотография, белая выразительная типографика первого экрана, спокойное светлое портфолио. Постоянная компактная шапка и исходный зарегистрированный знак.",
+  "palette": {
+    "ink": "#183B3C",
+    "brand": "#1AB2A5",
+    "deep": "#102E30",
+    "white": "#FFFFFF",
+    "paper": "#F6F8F5",
+    "mint": "#CCEade"
+  },
+  "fonts": {
+    "family": "Onest",
+    "weights": [
+      400,
+      600
+    ],
+    "source": "Local TTF files, verified loaded in browser",
+    "license": "assets/OFL-Onest.txt"
+  },
+  "content": "All project copy is editorial draft based on provided photographs and the existing project plan. Specific agency responsibilities and numerical results have not been invented. General service copy requires owner review before publication.",
+  "references": [
+    {
+      "url": "https://www.auditoire.com/",
+      "observed": "DOM content and project list available; animated viewport did not render reliably in local headless browser. Full visual assessment incomplete."
+    },
+    {
+      "url": "https://lyra-agency.ru/",
+      "observed": "DOM content, portfolio hierarchy and labels available; screenshots remained blank. Full visual assessment incomplete."
+    },
+    {
+      "url": "https://cuberto.com/",
+      "observed": "Web text available earlier; local browser returned ERR_TIMED_OUT. Visual assessment incomplete."
+    }
+  ],
+  "localStart": "npm run dev (from repository root)",
+  "localUrl": "http://127.0.0.1:4178",
+  "portableEntry": "http://127.0.0.1:4178/ (HTTP server required for ES modules)",
+  "next": "Implement minimal Payload CMS publishing workflow; see ../docs/NEXT-STEPS.md and ../docs/cms-next-steps.md. Figma is optional.",
+  "logo": {
+    "locked": true,
+    "rule": "Use the original registered logo unchanged, preserving shapes, colors and aspect ratio in header, footer and favicon. Dark backing preserves visibility of original white lettering.",
+    "source": "site_arr_media/public/images/arr_logo.svg",
+    "asset": "assets/arr_logo.svg"
+  },
+  "refinement": {
+    "comparison": "comparison.html",
+    "browserChecks": "Passed",
+    "headerDesktop": 90,
+    "headerMobile": 76,
+    "logoUnchanged": true,
+    "stylesheet": "design.css",
+    "widthsChecked": [
+      320,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ],
+    "cmsConnected": false
+  }
+}

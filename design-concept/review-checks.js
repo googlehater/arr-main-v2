@@ -1,0 +1,50 @@
+async page => {
+  const errors=[];
+  page.on('pageerror',error=>errors.push(error.message));
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await page.setViewportSize({width:1440,height:1000});
+  await page.goto('http://127.0.0.1:4178/');
+  await page.evaluate(async()=>{await Promise.all(Array.from(document.images).filter(img=>img.hasAttribute('src')).map(img=>{img.loading='eager';return img.decode().catch(()=>{})}))});
+  const badImages=await page.locator('img[src]').evaluateAll(images=>images.filter(i=>!i.naturalWidth).map(i=>i.src));
+  if(badImages.length)throw new Error('Missing images: '+badImages.join(','));
+  await page.screenshot({path:'artifacts/visual-review/arr-desktop.png'});
+  await page.screenshot({path:'artifacts/visual-review/arr-full-desktop.png',fullPage:true});
+  await page.locator('[data-scene="1"]').click();
+  await page.waitForFunction(()=>document.querySelector('[data-scene="1"]').getAttribute('aria-pressed')==='true');
+  if(!(await page.locator('#hero-image').getAttribute('src')).includes('culture'))throw new Error('Scene did not switch');
+  await page.locator('[data-scene="0"]').click();
+  await page.locator('[data-filter="business"]').click();
+  if(await page.locator('.project-card').count()!==1)throw new Error('Business filter');
+  await page.locator('[data-filter="sport"]').click();
+  if(await page.locator('.project-card').count()!==3)throw new Error('Sport filter');
+  await page.locator('[href="#project/ohl"]').click();
+  await page.locator('#case-title').waitFor({state:'visible'});
+  await page.screenshot({path:'artifacts/visual-review/arr-case.png'});
+  await page.locator('.gallery-photo').first().click();
+  if(!(await page.locator('#lightbox').evaluate(el=>el.open)))throw new Error('Lightbox closed');
+  await page.keyboard.press('Escape');
+  if(await page.locator('#lightbox').evaluate(el=>el.open))throw new Error('Escape did not close gallery');
+  await page.locator('.back').click();
+  if(await page.locator('.project-card').count()!==3)throw new Error('Filter not retained');
+  await page.locator('[data-filter="all"]').click();
+  await page.setViewportSize({width:390,height:844});
+  await page.goto('http://127.0.0.1:4178/');
+  await page.evaluate(async()=>{await Promise.all(Array.from(document.images).filter(img=>img.hasAttribute('src')).map(img=>{img.loading='eager';return img.decode().catch(()=>{})}))});
+  await page.screenshot({path:'artifacts/visual-review/arr-mobile.png'});
+  await page.screenshot({path:'artifacts/visual-review/arr-full-mobile.png',fullPage:true});
+  await page.locator('.menu-toggle').click();
+  if(await page.locator('#mobile-menu').isHidden())throw new Error('Menu closed');
+  await page.keyboard.press('Escape');
+  if(!(await page.locator('#mobile-menu').isHidden()))throw new Error('Menu Escape failed');
+  const widths=[];
+  for(const width of [320,390,768,1440]){
+    await page.setViewportSize({width,height:900});
+    const result=await page.evaluate(()=>({viewport:innerWidth,scroll:document.documentElement.scrollWidth}));
+    widths.push(result);if(result.scroll>result.viewport+1)throw new Error('Overflow at '+width);
+  }
+  await page.goto('http://127.0.0.1:4178/#project/torpedo');
+  if(!(await page.locator('#case-title').textContent()).includes('Победа'))throw new Error('Direct case URL');
+  if(errors.length)throw new Error(errors.join('\n'));
+  await page.goto('http://127.0.0.1:4178/');
+  return {passed:true,projects:5,checks:['photos','scene switching','filters','case navigation','direct case URL','gallery Escape','filter retention','mobile menu','horizontal overflow'],widths,errors};
+}
